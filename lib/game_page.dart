@@ -1,3 +1,7 @@
+import 'package:bullseye_flutter/control.dart';
+import 'package:bullseye_flutter/gamemodel.dart';
+import 'package:bullseye_flutter/prompt.dart';
+import 'package:bullseye_flutter/score.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +18,13 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> {
   bool _alertIsVisible = false;
+  GameModel _model;
+
+  @override
+  void initState() {
+    super.initState();
+    _model = GameModel(50);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +33,9 @@ class _GamePageState extends State<GamePage> {
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-          Text(
-            "Welcome to the app!",
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
+          Prompt(targetValue: _model.target),
+          Control(
+            model: _model,
           ),
           RaisedButton(
             child: Text("Hit me!", style: TextStyle(color: Colors.blue)),
@@ -33,33 +44,11 @@ class _GamePageState extends State<GamePage> {
               this._showAlert(context);
             },
           ),
-          FlatButton(
-            child: Text("Knock Knock!", style: TextStyle(color: Colors.red)),
-            onPressed: () {
-              this._alertIsVisible = true;
-              this._showKnockKnockAlert(context);
-            },
+          Score(
+            round: _model.round,
+            totalScore: _model.totalScore,
           )
         ])));
-  }
-
-  void _showKnockKnockAlert(BuildContext context) {
-    Widget dismissButton = FlatButton(
-      child: Text("Dismiss"),
-      onPressed: () {
-        this._alertIsVisible = false;
-        Navigator.of(context).pop();
-      },
-    );
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            actions: [dismissButton],
-            title: Text("Who's there?"),
-            content: Text("Some random joke!"),
-          );
-        });
   }
 
   void _showAlert(BuildContext context) {
@@ -74,7 +63,7 @@ class _GamePageState extends State<GamePage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text("Hello there!"),
-            content: Text("This is my first popup"),
+            content: Text("The slider's value is ${_model.current}."),
             actions: <Widget>[okButton],
             elevation: 5,
           );
