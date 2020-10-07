@@ -14,6 +14,7 @@ class BullsEyeFlutter extends StatelessWidget {
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight
     ]);
+    SystemChrome.setEnabledSystemUIOverlays([]); // Full Screen
     return MaterialApp(
         title: "Bulls Eye",
         theme: ThemeData(primarySwatch: Colors.blue),
