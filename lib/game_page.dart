@@ -4,6 +4,7 @@ import 'package:bullseye_flutter/prompt.dart';
 import 'package:bullseye_flutter/score.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 class GamePage extends StatefulWidget {
   GamePage({Key key, this.title}) : super(key: key);
@@ -23,7 +24,7 @@ class _GamePageState extends State<GamePage> {
   @override
   void initState() {
     super.initState();
-    _model = GameModel(50);
+    _model = GameModel(Random().nextInt(100) + 1);
   }
 
   @override
@@ -51,6 +52,12 @@ class _GamePageState extends State<GamePage> {
         ])));
   }
 
+  int _pointsForCurrentRound() {
+    var maximumScore = 100;
+    var difference = (_model.target - _model.current).abs();
+    return maximumScore - difference;
+  }
+
   void _showAlert(BuildContext context) {
     Widget okButton = FlatButton(
         child: Text("Awesome"),
@@ -63,7 +70,7 @@ class _GamePageState extends State<GamePage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text("Hello there!"),
-            content: Text("The slider's value is ${_model.current}."),
+            content: Text("The slider's value is ${_model.current}.\n You scored ${_pointsForCurrentRound()} this round."),
             actions: <Widget>[okButton],
             elevation: 5,
           );
